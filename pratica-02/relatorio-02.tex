@@ -1,0 +1,426 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{geometry}
+\geometry{top=2.0cm,bottom=2.0cm,left=2.2cm,right=2.2cm,headheight=14pt}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs,tabularx,array,multirow}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{hyperref}
+
+\definecolor{petrol}{HTML}{1F4E5F}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=petrol,
+  citecolor=petrol,
+  urlcolor=petrol,
+  pdftitle={Pressão de saturação e calor latente},
+  pdfauthor={Rodrigo Malato Navegantes}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{EMA-103 -- Laboratório de Térmica}
+\rhead{Prática 2}
+\cfoot{\thepage\ de \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\setlength{\parindent}{1.2em}
+\setlength{\parskip}{0.15em}
+\renewcommand{\arraystretch}{1.12}
+\captionsetup{font=small,labelfont=bf}
+\renewcommand{\tablename}{Tabela}
+\renewcommand{\figurename}{Figura}
+
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}{\z@}%
+  {-2.4ex \@plus -1ex \@minus -.2ex}{1.0ex \@plus .2ex}%
+  {\normalfont\large\bfseries\color{petrol}}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+  {-1.8ex \@plus -1ex \@minus -.2ex}{0.6ex \@plus .2ex}%
+  {\normalfont\normalsize\bfseries\color{petrol}}}
+\makeatother
+
+\newcommand{\Psat}{P_{\mathrm{sat}}}
+\newcommand{\Tsat}{T_{\mathrm{sat}}}
+\newcommand{\hlv}{h_{lv}}
+\newcommand{\Qdot}{\dot Q}
+\newcommand{\mdot}{\dot m}
+
+% Os valores abaixo são gerados por calculos_pratica2.py.
+\input{resultados.tex}
+
+\begin{document}
+
+\begin{center}
+  {\small UNIVERSIDADE FEDERAL DE MINAS GERAIS\\
+  Escola de Engenharia -- Engenharia Aeroespacial\\
+  EMA-103 -- Laboratório de Térmica}
+
+  \vspace{1.25cm}
+  {\LARGE\bfseries\color{petrol} Pressão de saturação e calor latente}
+
+  \vspace{0.95cm}
+  \begin{tabular}{>{\bfseries}r l}
+    Aluno(a): & Rodrigo Malato Navegantes\\
+    Matrícula: & 2023038175\\
+    Turma: & EA1\\
+    Professor(a): & Luiz Machado\\
+    Data da prática: & \DataPratica\\
+  \end{tabular}
+\end{center}
+
+\vspace{0.55cm}\hrule\vspace{0.65cm}
+
+\section{Objetivo}
+
+Determinar experimentalmente a pressão e a temperatura de saturação da água,
+$\Psat$ e $\Tsat$, e o calor latente de evaporação, $\hlv$, em uma panela de
+pressão tampada sem a válvula. Determinar também $\Psat$ e $\Tsat$ com a
+válvula instalada e verificar a consistência dos resultados pela comparação
+com valores termodinâmicos de referência, considerando as incertezas das
+grandezas medidas e calculadas.
+
+\section{Fundamentação teórica}
+
+Durante a mudança de fase de uma substância pura em equilíbrio, a pressão e a
+temperatura permanecem relacionadas pela curva de saturação. A pressão absoluta
+no interior da panela é obtida pela soma entre a pressão atmosférica e a pressão
+manométrica:
+\begin{equation}
+  P_{\mathrm{sat,exp}}=P_{\mathrm{atm}}+P_{\mathrm{man}}.
+  \label{eq:psat}
+\end{equation}
+
+Com a válvula instalada, uma segunda estimativa da pressão manométrica decorre
+do equilíbrio entre o peso da válvula e a força exercida pelo vapor sobre a
+área do pino:
+\begin{equation}
+  P_{\mathrm{valv}}=\frac{m_{\mathrm{valv}}g}
+  {\pi d_{\mathrm{pino}}^2/4},
+  \qquad
+  P_{\mathrm{sat,valv}}=P_{\mathrm{atm}}+P_{\mathrm{valv}}.
+  \label{eq:valvula}
+\end{equation}
+
+Na condição sem válvula, a redução do nível da água permite calcular a vazão
+mássica evaporada. Adotando a densidade $\rho_l$ da água líquida saturada na
+temperatura experimental,
+\begin{equation}
+  \mdot_{\mathrm{evap}}=\rho_l\left(\frac{\pi d_{\mathrm{int}}^2}{4}\right)
+  \frac{\Delta H}{\Delta t}.
+  \label{eq:mdot}
+\end{equation}
+
+A potência fornecida ao resistor é $\Qdot_{\mathrm{el}}=V_{AB}I$. Parte dessa
+potência é transferida ao ambiente pelas paredes laterais e pela tampa. Para
+uma superfície lateral vertical e uma tampa horizontal aquecida, o roteiro
+emprega as aproximações~\cite{roteiro}
+\begin{align}
+  S_v&=\pi d_{\mathrm{ext}}H,
+  &S_h&=\frac{\pi d_{\mathrm{ext}}^2}{4},
+  &L_c&=\frac{d_{\mathrm{ext}}}{4},
+  \label{eq:areas}\\
+  h_{\mathrm{conv},v}&=1{,}42
+  \left(\frac{T_s-T_{\mathrm{amb}}}{H}\right)^{1/4},
+  &h_{\mathrm{conv},h}&=1{,}32
+  \left(\frac{T_s-T_{\mathrm{amb}}}{L_c}\right)^{1/4}.
+  \label{eq:hconv}
+\end{align}
+Admitiu-se $T_s\simeq\Tsat$. O coeficiente linearizado de radiação é
+\begin{equation}
+  h_{\mathrm{rad}}=\varepsilon\sigma(T_s+T_{\mathrm{amb}})
+  (T_s^2+T_{\mathrm{amb}}^2),
+  \label{eq:hrad}
+\end{equation}
+com as temperaturas em kelvin. Assim,
+\begin{align}
+  \Qdot_{\mathrm{perdas}}={}&
+  (h_{\mathrm{conv},v}+h_{\mathrm{rad}})S_v(T_s-T_{\mathrm{amb}})
+  \nonumber\\[-0.2em]
+  &+(h_{\mathrm{conv},h}+h_{\mathrm{rad}})S_h(T_s-T_{\mathrm{amb}}),
+  \label{eq:qperdas}\\
+  \Qdot_{\mathrm{evap}}={}&V_{AB}I-\Qdot_{\mathrm{perdas}},
+  &h_{lv,\mathrm{exp}}=\frac{\Qdot_{\mathrm{evap}}}{\mdot_{\mathrm{evap}}}.
+  \label{eq:hlv}
+\end{align}
+
+\section{Materiais e método}
+
+Foram utilizados uma panela de pressão com resistor elétrico de imersão, um
+termopar tipo K conectado a um medidor de temperatura, um manômetro, um
+multímetro, um alicate amperímetro, uma balança, um cronômetro, uma escala de
+aço e um paquímetro. A montagem é apresentada na Figura~\ref{fig:montagem}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.78\textwidth]{montagem.jpg}
+  \caption{Montagem experimental da Prática 2. Fonte: material didático da
+  disciplina~\cite{roteiro}.}
+  \label{fig:montagem}
+\end{figure}
+
+Inicialmente, foram medidos os diâmetros interno e externo e a altura da
+panela, bem como a massa da válvula e o diâmetro do pino. Na configuração sem
+válvula, a panela foi aquecida até o estabelecimento de ebulição aproximadamente
+estacionária. Registraram-se a pressão manométrica, a temperatura de saturação,
+a tensão e a corrente elétrica. A redução do nível de água foi medida durante
+o intervalo indicado pelo cronômetro. Em seguida, instalou-se a válvula e,
+novamente em regime aproximadamente estacionário, registraram-se a pressão
+manométrica e a temperatura de saturação.
+
+A pressão atmosférica foi obtida na tabela da estação automática Belo
+Horizonte--Pampulha (A521) do INMET~\cite{inmet}. Para 1 de setembro de 2026,
+o registro das 12:00 UTC apresentou $25{,}9\,^{\circ}\mathrm{C}$, a temperatura
+mais próxima da condição ambiente medida no laboratório
+($\Tamb\,^{\circ}\mathrm{C}$), e pressão instantânea de $918{,}6$ hPa. Adotou-se,
+portanto, $P_{\mathrm{atm}}=\Patm$ kPa.
+
+\section{Resultados e discussão}
+
+\subsection{Medições}
+
+A Tabela~\ref{tab:medicoes} reúne os valores empregados no tratamento. As
+incertezas indicadas nesta tabela são os limites fornecidos no roteiro ou na
+apresentação das medições.
+
+\begin{table}[H]
+\centering
+\caption{Grandezas medidas e respectivas incertezas.}
+\label{tab:medicoes}
+\small
+\begin{tabular}{lccc}
+\toprule
+\textbf{Grandeza} & \textbf{Sem válvula} & \textbf{Com válvula} & \textbf{Incerteza}\\
+\midrule
+$V_{AB}$ (V) & \Vaberta & -- & $\pm3\%$\\
+$I$ (A) & \Iaberta & -- & $\pm3\%$\\
+$P_{\mathrm{man}}$ (bar) & \Pmanaberta & \Pmanfechada & $\pm0{,}05$ bar\\
+$\Tsat$ ($^{\circ}$C) & \Tsataberta & \Tsatfechada & $\pm1{,}0\,^{\circ}$C\\
+$\Delta H$ (mm) & \DeltaH & -- & $\pm2$ mm\\
+$\Delta t$ (s) & \Deltat & -- & $\pm30$ s\\
+$T_{\mathrm{amb}}$ ($^{\circ}$C) & \multicolumn{2}{c}{\Tamb} & $\pm1{,}0\,^{\circ}$C\\
+$P_{\mathrm{atm}}$ (kPa) & \multicolumn{2}{c}{\Patm} & $\pm2\%$\\
+$g$ (m/s$^2$) & \multicolumn{2}{c}{9,78} & $\pm0{,}01$ m/s$^2$\\
+$m_{\mathrm{valv}}$ (g) & \multicolumn{2}{c}{\Mvalvula} & $\pm0{,}1$ g\\
+$d_{\mathrm{pino}}$ (mm) & \multicolumn{2}{c}{\Dpino} & $\pm0{,}1$ mm\\
+$d_{\mathrm{int}}$ (mm) & \multicolumn{2}{c}{\Dint} & $\pm1$ mm\\
+$d_{\mathrm{ext}}$ (mm) & \multicolumn{2}{c}{\Dext} & $\pm1$ mm\\
+$H$ (mm) & \multicolumn{2}{c}{\Hpanela} & $\pm5$ mm\\
+$\varepsilon$ & \multicolumn{2}{c}{0,60} & não informada\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Tratamento das incertezas}
+
+Os limites da Tabela~\ref{tab:medicoes} foram tratados como
+incertezas-padrão, as medições foram consideradas independentes e as
+derivadas de sensibilidade foram calculadas numericamente. Para uma grandeza
+indireta $y=f(x_1,\ldots,x_n)$, aplicou-se
+\begin{equation}
+  u_c(y)=\left[\sum_i\left(\frac{\partial y}{\partial x_i}u(x_i)\right)^2
+  \right]^{1/2},
+  \qquad U(y)=k\,u_c(y),\qquad k=2.
+  \label{eq:incerteza}
+\end{equation}
+Logo, os resultados calculados a seguir são apresentados com incerteza
+expandida, correspondente a uma abrangência de aproximadamente 95\% sob as
+hipóteses usuais. Não foi incluída incerteza para a emissividade nem para os
+próprios modelos de convecção, pois esses limites não foram especificados.
+O programa utilizado no tratamento dos dados pode ser consultado e baixado em
+\href{https://ema103-pratica2-codigo.navegantesmalato.chatgpt.site}
+{Código Python da Prática 2}.
+
+\subsection{Pressão e temperatura de saturação}
+
+Na condição sem válvula, a Equação~\eqref{eq:psat} fornece diretamente a
+pressão atmosférica, pois a leitura manométrica foi nula. Com a válvula, a
+pressão devida ao peso foi
+\begin{equation}
+  P_{\mathrm{valv}}=\Pvalvula\pm\UPvalvula\ \mathrm{kPa}\quad(k=2).
+  \label{eq:pvalv-res}
+\end{equation}
+A Tabela~\ref{tab:pressoes} compara as pressões absolutas experimentais com as
+pressões correspondentes às temperaturas medidas. Os valores de referência
+foram calculados pela equação de Antoine para a água~\cite{nist}; a incerteza
+de $\Tsat$ também foi propagada nesses valores.
+
+\begin{table}[H]
+\centering
+\caption{Pressões de saturação experimentais e de referência. Todas as
+incertezas são expandidas, com $k=2$.}
+\label{tab:pressoes}
+\small
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}X c c c c}
+\toprule
+\textbf{Condição/método} &
+\textbf{$P_{\mathrm{exp}}$ (kPa)} &
+\textbf{$P(\Tsat)$ (kPa)} &
+\textbf{Desvio} &
+\textbf{Compatível}\\
+\midrule
+Sem válvula -- manômetro &
+$\Psataberta\pm\UPsataberta$ &
+$\Psattababerta\pm\UPsattababerta$ &
+$+\DesvioPaberta\%$ & \CompPaberta\\
+Com válvula -- manômetro &
+$\Psatfechadaman\pm\UPsatfechadaman$ &
+$\Psattabfechada\pm\UPsattabfechada$ &
+$+\DesvioPfechadaman\%$ & \CompPfechadaman\\
+Com válvula -- peso &
+$\Psatfechadavalvula\pm\UPsatfechadavalvula$ &
+$\Psattabfechada\pm\UPsattabfechada$ &
+$+\DesvioPfechadavalvula\%$ & \CompPfechadavalvula\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Os três pares são compatíveis porque seus intervalos expandidos se sobrepõem.
+Na panela sem válvula, o desvio foi de $\DesvioPaberta\%$. Com a válvula, as
+pressões absolutas determinadas pelo manômetro e pelo peso diferiram apenas
+$\DiferencaManPeso$ kPa, valor muito menor que suas incertezas. Essa concordância
+interna sustenta a leitura manométrica, embora os dois resultados tenham ficado
+cerca de 6\% acima da pressão calculada a partir de $\Tsat$.
+
+Uma verificação equivalente pode ser feita invertendo a relação de saturação,
+como mostra a Tabela~\ref{tab:temperaturas}. A incerteza expandida das
+temperaturas medidas é $2{,}0\,^{\circ}\mathrm{C}$.
+
+\begin{table}[H]
+\centering
+\caption{Comparação entre temperaturas medidas e inferidas pelas pressões.}
+\label{tab:temperaturas}
+\small
+\begin{tabular}{lcc}
+\toprule
+\textbf{Condição/método} & \textbf{$T$ medida ($^{\circ}$C)} &
+\textbf{$T(P)$ ($^{\circ}$C)}\\
+\midrule
+Sem válvula -- manômetro & $\Tsataberta\pm2{,}0$ &
+$\TsatdePaberta\pm\UTsatdePaberta$\\
+Com válvula -- manômetro & $\Tsatfechada\pm2{,}0$ &
+$\TsatdePfechadaman\pm\UTsatdePfechadaman$\\
+Com válvula -- peso & $\Tsatfechada\pm2{,}0$ &
+$\TsatdePfechadavalvula\pm\UTsatdePfechadavalvula$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+As temperaturas inferidas também são compatíveis com as medições. As pequenas
+diferenças podem decorrer da oscilação da válvula e do manômetro, de perdas de
+carga locais, do contato e posicionamento do termopar, de vazamentos pela
+vedação e da aproximação de equilíbrio termodinâmico durante a fervura.
+
+\subsection{Balanço de energia e calor latente}
+
+Para a panela sem válvula, foram obtidos $\rho_l=\Rhol\ \mathrm{kg/m^3}$,
+$S_v=\AreaV\ \mathrm{m^2}$ e $S_h=\AreaH\ \mathrm{m^2}$. Os coeficientes
+estimados foram $h_{\mathrm{conv},v}=\HconvV$,
+$h_{\mathrm{conv},h}=\HconvH$ e $h_{\mathrm{rad}}=\Hrad$, todos em
+$\mathrm{W/(m^2K)}$. A Tabela~\ref{tab:energia} mostra as etapas seguintes do
+balanço.
+
+\begin{table}[H]
+\centering
+\caption{Balanço de energia e determinação do calor latente. As incertezas
+calculadas são expandidas, com $k=2$.}
+\label{tab:energia}
+\small
+\begin{tabular}{lcc}
+\toprule
+\textbf{Grandeza} & \textbf{Resultado} & \textbf{Unidade}\\
+\midrule
+Potência elétrica, $\Qdot_{\mathrm{el}}$ & $\Qeletrica\pm\UQeletrica$ & W\\
+Perda pelas paredes, $\Qdot_{\mathrm{perda},v}$ & $\Qperdav\pm\UQperdav$ & W\\
+Perda pela tampa, $\Qdot_{\mathrm{perda},h}$ & $\Qperdah\pm\UQperdah$ & W\\
+Perda total, $\Qdot_{\mathrm{perdas}}$ & $\Qperdatotal\pm\UQperdatotal$ & W\\
+Potência para evaporação, $\Qdot_{\mathrm{evap}}$ & $\Qevap\pm\UQevap$ & W\\
+Massa evaporada, $m_{\mathrm{evap}}$ & $\MassaEvap$ & kg\\
+Vazão evaporada, $\mdot_{\mathrm{evap}}$ & $\Mdot\pm\UMdot$ & g/s\\
+Calor latente experimental, $h_{lv,\mathrm{exp}}$ &
+$\Hlvexp\pm\UHlvexp$ & MJ/kg\\
+Calor latente de referência, $h_{lv,\mathrm{ref}}$ &
+$\Hlvtab\pm\UHlvtab$ & MJ/kg\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+As perdas estimadas representaram $\FracPerdas\%$ da potência elétrica; assim,
+a maior parte da energia fornecida foi associada à evaporação. O calor latente
+experimental ficou $\DesvioHlv\%$ abaixo da referência calculada na mesma
+temperatura pela correlação de Watson~\cite{watson}. Ainda assim, os intervalos
+$[1{,}792;2{,}362]$ MJ/kg e $[2{,}263;2{,}275]$ MJ/kg se sobrepõem, de modo que
+os valores são compatíveis no nível de abrangência adotado.
+
+A incerteza de $\Delta H$ é relevante para a vazão evaporada, enquanto as
+incertezas de tensão e corrente dominam a potência elétrica. Na estimativa pelo
+peso da válvula, a dependência quadrática em $d_{\mathrm{pino}}$ torna a
+incerteza desse diâmetro especialmente importante. Além desses efeitos
+quantificados, podem ter contribuído para o desvio do calor latente: a
+aproximação $T_s\simeq\Tsat$; o caráter empírico das correlações de convecção;
+a ausência de uma incerteza atribuída à emissividade; a condução pelos apoios e
+cabos; a energia armazenada caso o regime não fosse perfeitamente estacionário;
+e a dificuldade de medir com precisão a variação do nível durante a ebulição.
+
+\clearpage
+\section{Conclusão}
+
+Na panela sem válvula, foram obtidos
+$\Psat=\Psataberta\pm\UPsataberta\ \mathrm{kPa}$ e
+$\Tsat=\Tsataberta\pm2{,}0\,^{\circ}\mathrm{C}$. Na condição com válvula, a
+pressão absoluta resultou em
+$\Psatfechadaman\pm\UPsatfechadaman\ \mathrm{kPa}$ pelo manômetro e
+$\Psatfechadavalvula\pm\UPsatfechadavalvula\ \mathrm{kPa}$ pelo equilíbrio do
+peso. A diferença de somente $\DiferencaManPeso$ kPa entre os valores centrais
+mostrou boa consistência entre os dois métodos.
+
+Após descontar $\Qperdatotal\pm\UQperdatotal$ W de perdas térmicas, determinou-se
+$h_{lv,\mathrm{exp}}=\Hlvexp\pm\UHlvexp\ \mathrm{MJ/kg}$, com incerteza expandida
+$k=2$. O desvio de $\DesvioHlv\%$ em relação ao valor de referência
+$\Hlvtab\pm\UHlvtab\ \mathrm{MJ/kg}$ não impediu a sobreposição das faixas de
+incerteza. As pressões e temperaturas também apresentaram compatibilidade com a
+relação de saturação da água. Portanto, dentro das incertezas e hipóteses do
+modelo, os resultados foram coerentes e os objetivos da prática foram
+alcançados.
+
+\begin{thebibliography}{9}
+\bibitem{roteiro}
+UFMG. \textit{EMA-103: Laboratório de Térmica -- Aulas 4 e 5: pressão de
+saturação e calor latente}. Material didático da disciplina, 2026.
+
+\bibitem{inmet}
+INSTITUTO NACIONAL DE METEOROLOGIA (INMET). \textit{Tabela de dados da estação
+automática Belo Horizonte--Pampulha (A521)}. Disponível em:
+\url{https://tempo.inmet.gov.br/TabelaEstacoes/A521}. Acesso em: 6 set. 2026.
+
+\bibitem{incropera}
+BERGMAN, T. L.; LAVINE, A. S.; INCROPERA, F. P.; DEWITT, D. P.
+\textit{Fundamentals of Heat and Mass Transfer}. 6. ed. Hoboken: Wiley, 2011.
+
+\bibitem{cengel}
+ÇENGEL, Y. A.; BOLES, M. A. \textit{Thermodynamics: An Engineering Approach}.
+8. ed. New York: McGraw-Hill, 2015.
+
+\bibitem{nist}
+NATIONAL INSTITUTE OF STANDARDS AND TECHNOLOGY (NIST). \textit{NIST Chemistry
+WebBook: Water}. Disponível em:
+\url{https://webbook.nist.gov/cgi/cbook.cgi?ID=C7732185\&Mask=1F}.
+Acesso em: 6 set. 2026.
+
+\bibitem{watson}
+WATSON, K. M. Thermodynamics of the liquid state. \textit{Industrial \&
+Engineering Chemistry}, v. 35, n. 4, p. 398--406, 1943.
+\url{https://doi.org/10.1021/ie50400a004}.
+\end{thebibliography}
+
+\end{document}
