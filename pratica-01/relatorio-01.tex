@@ -1,0 +1,396 @@
+\documentclass[11pt,a4paper]{article}
+
+% ================================================================
+% DADOS EDITAVEIS
+% Substitua os campos abaixo pelos dados do aluno e pelas medicoes.
+% Depois de preencher tambem os resultados calculados, troque
+% \dadoscompletosfalse por \dadoscompletostrue.
+% ================================================================
+\newif\ifdadoscompletos
+\dadoscompletostrue
+
+\newcommand{\aluno}{Rodrigo Malato Navegantes}
+\newcommand{\matricula}{2023038175}
+\newcommand{\turma}{EA1}
+\newcommand{\professor}{Luiz Machado}
+\newcommand{\dataexperimento}{11 de agosto de 2026}
+
+% Medicoes: sem vento / com vento
+\newcommand{\Vsem}{32{,}00}
+\newcommand{\Vcom}{32{,}00}
+\newcommand{\Isem}{0{,}394}
+\newcommand{\Icom}{0{,}394}
+\newcommand{\Tssem}{86{,}7}
+\newcommand{\Tscom}{34{,}5}
+\newcommand{\Tinfsem}{24{,}0}
+\newcommand{\Tinfcom}{24{,}0}
+\newcommand{\velcom}{3{,}00}
+
+% Resultados: sem vento / com vento
+\newcommand{\qsem}{12{,}61}
+\newcommand{\qcom}{12{,}61}
+\newcommand{\DTsem}{62{,}7}
+\newcommand{\DTcom}{10{,}5}
+\newcommand{\hexpsem}{12{,}92}
+\newcommand{\hexpcom}{77{,}17}
+\newcommand{\uhexpsem}{0{,}62}
+\newcommand{\uhexpcom}{10{,}90}
+\newcommand{\hradsem}{4{,}87}
+\newcommand{\hradcom}{3{,}76}
+\newcommand{\hconvsem}{7{,}37}
+\newcommand{\hconvcom}{39{,}73}
+\newcommand{\hteosem}{12{,}23}
+\newcommand{\hteocom}{43{,}49}
+\newcommand{\desviosem}{5{,}6}
+\newcommand{\desviocom}{77{,}4}
+
+% ================================================================
+% FORMATACAO
+% ================================================================
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[brazil]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[a4paper,margin=2.45cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs,tabularx,array}
+\usepackage{siunitx}
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{hyperref}
+
+\definecolor{azul}{HTML}{164A73}
+\definecolor{cinza}{HTML}{555555}
+\definecolor{fundonota}{HTML}{F3F6F8}
+
+\sisetup{
+  locale = DE,
+  per-mode = symbol,
+  exponent-product = \cdot,
+  output-decimal-marker = {,},
+  separate-uncertainty = true
+}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=azul,
+  urlcolor=azul,
+  citecolor=azul,
+  pdftitle={Transferência de calor por convecção e radiação combinadas em uma barra cilíndrica},
+  pdfauthor={\aluno}
+}
+
+\titleformat{\section}
+  {\large\bfseries\color{azul}}
+  {\thesection}{0.65em}{}
+\titleformat{\subsection}
+  {\normalsize\bfseries\color{azul}}
+  {\thesubsection}{0.65em}{}
+\titlespacing*{\section}{0pt}{1.4em}{0.55em}
+\titlespacing*{\subsection}{0pt}{1.0em}{0.35em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{EMA-103 --- Laboratório de Térmica}
+\rhead{Prática 1}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\headheight}{14pt}
+
+\setlength{\parindent}{1.15cm}
+\setlength{\parskip}{0.2em}
+\renewcommand{\arraystretch}{1.16}
+\captionsetup{font=small,labelfont=bf}
+
+\lstdefinestyle{pythonema}{
+  language=Python,
+  basicstyle=\ttfamily\scriptsize,
+  keywordstyle=\color{azul}\bfseries,
+  commentstyle=\color{cinza}\itshape,
+  stringstyle=\color{teal!70!black},
+  numbers=left,
+  numberstyle=\tiny\color{cinza},
+  numbersep=7pt,
+  frame=single,
+  rulecolor=\color{black!25},
+  backgroundcolor=\color{fundonota},
+  breaklines=true,
+  breakatwhitespace=false,
+  showstringspaces=false,
+  keepspaces=true,
+  columns=fullflexible,
+  tabsize=4,
+  captionpos=b,
+  literate=
+    {á}{{\'a}}1 {à}{{\`a}}1 {â}{{\^a}}1 {ã}{{\~a}}1
+    {é}{{\'e}}1 {ê}{{\^e}}1 {í}{{\'i}}1
+    {ó}{{\'o}}1 {ô}{{\^o}}1 {õ}{{\~o}}1
+    {ú}{{\'u}}1 {ç}{{\c c}}1
+    {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1
+    {Ó}{{\'O}}1 {Ú}{{\'U}}1 {Ç}{{\c C}}1
+    {²}{{$^2$}}1 {±}{{$\pm$}}1
+}
+
+\newcommand{\naoinformado}{\textemdash}
+\newcommand{\nota}[1]{%
+  \begin{center}
+    \colorbox{fundonota}{\parbox{0.92\linewidth}{\small #1}}
+  \end{center}
+}
+
+\begin{document}
+
+\begin{center}
+  {\small UNIVERSIDADE FEDERAL DE MINAS GERAIS\\
+  Escola de Engenharia --- Engenharia Aeroespacial\\
+  EMA-103 --- Laboratório de Térmica}
+
+  \vspace{1.1cm}
+
+  {\LARGE\bfseries\color{azul}
+  Transferência de calor por convecção e radiação combinadas em uma barra cilíndrica}
+
+  \vspace{0.9cm}
+
+  \begin{tabular}{@{}rl@{}}
+    \textbf{Aluno(a):} & \aluno \\
+    \textbf{Matrícula:} & \matricula \\
+    \textbf{Turma:} & \turma \\
+    \textbf{Professor(a):} & \professor \\
+    \textbf{Data da prática:} & \dataexperimento
+  \end{tabular}
+\end{center}
+
+\vspace{0.65cm}
+\hrule
+
+\section{Objetivo}
+
+Determinar experimentalmente o coeficiente combinado de transferência de calor por convecção e radiação de uma barra cilíndrica de aço, aquecida internamente por resistores elétricos e exposta ao ar ambiente. Foram consideradas duas condições: convecção natural, sem acionamento do soprador, e convecção forçada, com escoamento transversal de ar. Os valores experimentais devem ser comparados às estimativas obtidas por correlações da literatura, levando em conta as incertezas de medição.
+
+\section{Fundamentação teórica}
+
+Em regime permanente, admitindo desprezíveis as perdas elétricas e a condução de calor pelos apoios, a potência elétrica fornecida aos resistores é igual à taxa de calor dissipada pela barra:
+
+\begin{equation}
+  \dot Q = V_{AB} I.
+  \label{eq:potencia}
+\end{equation}
+
+Desprezando as áreas das extremidades, a superfície lateral de troca térmica é
+
+\begin{equation}
+  S = \pi d L,
+  \label{eq:area}
+\end{equation}
+
+e o coeficiente experimental combinado é calculado por
+
+\begin{equation}
+  h_{\mathrm{exp}} =
+  \frac{\dot Q}{S\left(T_s-T_\infty\right)}.
+  \label{eq:hexp}
+\end{equation}
+
+O coeficiente linearizado de radiação entre a barra e as superfícies vizinhas, adotadas à temperatura do ambiente, é
+
+\begin{equation}
+  h_{\mathrm{rad}} = \varepsilon\sigma
+  \left(T_s^2+T_\infty^2\right)
+  \left(T_s+T_\infty\right),
+  \label{eq:hrad}
+\end{equation}
+
+em que as temperaturas são absolutas, $\varepsilon=0{,}60$ é a emissividade da barra e $\sigma=\SI{5.67e-8}{\watt\per\square\metre\per\kelvin\tothe{4}}$ é a constante de Stefan--Boltzmann.
+
+Para a condição sem vento, o número de Nusselt médio para convecção natural sobre um cilindro horizontal pode ser estimado pela correlação de Churchill e Chu \cite{incropera}:
+
+\begin{equation}
+  \overline{Nu}_d =
+  \left[
+  0{,}60+
+  \frac{0{,}387\,Ra_d^{1/6}}
+  {\left[1+\left(0{,}559/Pr\right)^{9/16}\right]^{8/27}}
+  \right]^2,
+  \qquad
+  h_{\mathrm{conv}}=\frac{\overline{Nu}_d k}{d}.
+  \label{eq:natural}
+\end{equation}
+
+Nessa expressão, $Ra_d=Gr_dPr$, $Gr_d=g\beta(T_s-T_\infty)d^3/\nu^2$ e as propriedades do ar são avaliadas na temperatura de filme $T_f=(T_s+T_\infty)/2$.
+
+Para a condição com vento, emprega-se a correlação de Churchill e Bernstein para escoamento transversal sobre um cilindro \cite{incropera}:
+
+\begin{equation}
+  \overline{Nu}_d = 0{,}3+
+  \frac{0{,}62Re_d^{1/2}Pr^{1/3}}
+  {\left[1+(0{,}4/Pr)^{2/3}\right]^{1/4}}
+  \left[1+\left(\frac{Re_d}{282000}\right)^{5/8}\right]^{4/5},
+  \label{eq:forcada}
+\end{equation}
+
+com $Re_d=\rho U d/\mu$ e $h_{\mathrm{conv}}=\overline{Nu}_d k/d$. Para o cálculo da densidade na saída do soprador, utilizou-se
+
+\begin{equation}
+  \rho=\frac{rP_{\mathrm{atm}}}{RT_\infty},
+  \qquad
+  r=1{,}2,\quad
+  P_{\mathrm{atm}}=\SI{92.45}{\kilo\pascal},\quad
+  R=\SI{0.287}{\kilo\joule\per\kilogram\per\kelvin}.
+  \label{eq:densidade}
+\end{equation}
+
+Por fim, a estimativa teórica do coeficiente combinado é
+
+\begin{equation}
+  h_{\mathrm{teo}}=h_{\mathrm{conv}}+h_{\mathrm{rad}}.
+  \label{eq:hteo}
+\end{equation}
+
+O tratamento numérico foi implementado em Python, com uso do CoolProp para a obtenção das propriedades termofísicas do ar. O código completo é apresentado no Apêndice~\ref{ap:codigo}.
+
+\section{Materiais e método}
+
+Foram utilizados uma barra cilíndrica de aço com resistores internos, uma fonte de tensão com indicação de tensão e corrente, um soprador de ar, um termopar tipo K conectado a um medidor de temperatura, um anemômetro, uma escala e um paquímetro. A montagem experimental é apresentada na Figura~\ref{fig:montagem}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.82\linewidth]{Imagens/montagem_labtermo_p1.png}
+  \caption{Montagem experimental da Prática 1}
+  \label{fig:montagem}
+\end{figure}
+
+Inicialmente foram medidos o comprimento e o diâmetro externo da barra. Em seguida, os resistores foram energizados e aguardou-se a aproximação do regime permanente. Registraram-se a tensão, a corrente elétrica, a temperatura superficial da barra e a temperatura ambiente. O procedimento foi realizado sem vento e repetido com o soprador acionado; nessa segunda condição, mediu-se também a velocidade do ar nas proximidades da barra.
+
+A pressão atmosférica foi obtida no Mapa de Estações do Instituto Nacional de Meteorologia (INMET) \cite{inmet}, utilizando-se a estação meteorológica da Pampulha em 11 de agosto de 2026, às 17 h. Nesse horário, foram registradas pressão instantânea de \SI{924.5}{\hecto\pascal}, máxima de \SI{925.3}{\hecto\pascal} e mínima de \SI{924.5}{\hecto\pascal}. Nos cálculos foi adotada a pressão instantânea, equivalente a \SI{92.45}{\kilo\pascal}, por representar a condição no instante considerado.
+
+\section{Resultados e discussão}
+
+\subsection{Medições}
+
+A Tabela~\ref{tab:medicoes} reúne as dimensões fornecidas no roteiro e os campos para as medições efetuadas na bancada.
+
+\begin{table}[H]
+  \centering
+  \caption{Grandezas medidas e incertezas instrumentais.}
+  \label{tab:medicoes}
+  \small
+  \begin{tabular}{lccc}
+    \toprule
+    \textbf{Grandeza} & \textbf{Sem vento} & \textbf{Com vento} & \textbf{Incerteza} \\
+    \midrule
+    $V_{AB}$ (\si{\volt}) & \Vsem & \Vcom & $\pm\,3\%$ \\
+    $I$ (\si{\ampere}) & \Isem & \Icom & $\pm\,3\%$ \\
+    $L$ (\si{\milli\metre}) & 195  & 195   & $\pm\,\SI{0.5}{\milli\metre}$ \\
+    $d$ (\si{\milli\metre}) & 25,4 & 25,4 & $\pm\,\SI{0.1}{\milli\metre}$ \\
+    $T_s$ (\si{\celsius}) & \Tssem & \Tscom & $\pm\,\SI{1}{\celsius}$ \\
+    $T_\infty$ (\si{\celsius}) & \Tinfsem & \Tinfcom & $\pm\,\SI{1}{\celsius}$ \\
+    $U$ (\si{\metre\per\second}) & \naoinformado & \velcom & $\pm\,5\%$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Propagação das incertezas}
+
+Admitindo medições independentes, a incerteza relativa da potência elétrica é
+
+\begin{equation}
+  \frac{u_{\dot Q}}{\dot Q}=
+  \sqrt{\left(\frac{u_V}{V}\right)^2+
+        \left(\frac{u_I}{I}\right)^2}
+  =\sqrt{0{,}03^2+0{,}03^2}=4{,}24\%.
+  \label{eq:uq}
+\end{equation}
+
+Para a área lateral, a combinação das incertezas de $d$ e $L$ resulta em
+
+\begin{equation}
+  \frac{u_S}{S}=
+  \sqrt{\left(\frac{u_d}{d}\right)^2+
+        \left(\frac{u_L}{L}\right)^2}
+  =0{,}47\%.
+  \label{eq:uarea}
+\end{equation}
+
+Como $\Delta T=T_s-T_\infty$, tem-se $u_{\Delta T}=\sqrt{u_{T_s}^2+u_{T_\infty}^2}=\SI{1.41}{\kelvin}$. Assim, a incerteza do coeficiente experimental é calculada por
+
+\begin{equation}
+  \frac{u_{h_{\mathrm{exp}}}}{h_{\mathrm{exp}}}=
+  \sqrt{
+    \left(\frac{u_V}{V}\right)^2+
+    \left(\frac{u_I}{I}\right)^2+
+    \left(\frac{u_d}{d}\right)^2+
+    \left(\frac{u_L}{L}\right)^2+
+    \left(\frac{u_{\Delta T}}{\Delta T}\right)^2}.
+  \label{eq:uh}
+\end{equation}
+
+\subsection{Coeficientes de transferência de calor}
+
+\begin{table}[H]
+  \centering
+  \caption{Resultados experimentais}
+  \label{tab:resultados}
+  \small
+  \begin{tabular}{lcc}
+    \toprule
+    \textbf{Grandeza} & \textbf{Sem vento} & \textbf{Com vento} \\
+    \midrule
+    $\dot Q$ (\si{\watt}) & \qsem & \qcom \\
+    $\Delta T$ (\si{\kelvin}) & \DTsem & \DTcom \\
+    $h_{\mathrm{exp}}$ (\si{\watt\per\square\metre\per\kelvin}) & \hexpsem & \hexpcom \\
+    $u_{h_{\mathrm{exp}}}$ (\si{\watt\per\square\metre\per\kelvin}) & \uhexpsem & \uhexpcom \\
+    $h_{\mathrm{rad}}$ (\si{\watt\per\square\metre\per\kelvin}) & \hradsem & \hradcom \\
+    $h_{\mathrm{conv}}$ (\si{\watt\per\square\metre\per\kelvin}) & \hconvsem & \hconvcom \\
+    $h_{\mathrm{teo}}$ (\si{\watt\per\square\metre\per\kelvin}) & \hteosem & \hteocom \\
+    Desvio relativo (\si{\percent}) & \desviosem & \desviocom \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+O acionamento do soprador reduziu a diferença de temperatura de \SI{62.7}{\kelvin} para \SI{10.5}{\kelvin}, embora a potência elétrica tenha permanecido em aproximadamente \SI{12.61}{\watt}. Como consequência, o coeficiente experimental combinado aumentou de \SI{12.92}{\watt\per\square\metre\per\kelvin} para \SI{77.17}{\watt\per\square\metre\per\kelvin}. A contribuição radiativa correspondeu a cerca de 40\% do coeficiente teórico sem vento, mas a aproximadamente 9\% com vento, mostrando que a convecção se tornou dominante no escoamento forçado.
+
+Sem vento, o desvio entre os coeficientes experimental e teórico foi de 5,6\%. Embora $h_{\mathrm{teo}}=\SI{12.23}{\watt\per\square\metre\per\kelvin}$ fique ligeiramente abaixo do intervalo experimental $h_{\mathrm{exp}}\pm u_{h_{\mathrm{exp}}}$, a diferença é pequena diante da dispersão típica das correlações de convecção natural. Com vento, entretanto, o desvio foi de 77,4\% e o valor teórico não pertence ao intervalo experimental. Essa diferença pode estar associada à baixa diferença de temperatura, que amplia a incerteza relativa, à medição local da velocidade do ar, à não uniformidade da temperatura superficial, ao resfriamento do próprio termopar pelo jato e às perdas de calor pelas extremidades e pelos apoios, contabilizadas como convecção na determinação de $h_{\mathrm{exp}}$.
+
+\section{Conclusão}
+
+Os coeficientes combinados obtidos foram
+\begin{align*}
+  h_{\mathrm{exp,sem}} &= \hexpsem\pm\uhexpsem,
+  & h_{\mathrm{teo,sem}} &= \hteosem,\\
+  h_{\mathrm{exp,com}} &= \hexpcom\pm\uhexpcom,
+  & h_{\mathrm{teo,com}} &= \hteocom,
+\end{align*}
+em \si{\watt\per\square\metre\per\kelvin}. O soprador produziu aumento expressivo da transferência de calor e reduziu a temperatura superficial da barra. A condição sem vento apresentou boa concordância com a estimativa teórica. Na condição com vento, o coeficiente experimental foi substancialmente superior ao previsto pela correlação, indicando influência relevante das limitações experimentais e das hipóteses adotadas no modelo.
+
+\begin{thebibliography}{9}
+
+\bibitem{slides}
+UFMG. \textit{EMA-103: Laboratório de Térmica --- Aulas 2 e 3: convecção e radiação em uma barra cilíndrica}. Material didático da disciplina, 2026.
+
+\bibitem{incropera}
+BERGMAN, T. L.; LAVINE, A. S.; INCROPERA, F. P.; DEWITT, D. P. \textit{Fundamentals of Heat and Mass Transfer}. 6. ed. Hoboken: Wiley, 2011.
+
+\bibitem{inmet}
+INSTITUTO NACIONAL DE METEOROLOGIA (INMET). \textit{Mapa de Estações}. Disponível em: \url{https://mapas.inmet.gov.br/}. Acesso em: 22 ago. 2026.
+
+\end{thebibliography}
+
+\appendix
+\section{Código em Python}
+\label{ap:codigo}
+
+\lstinputlisting[
+  style=pythonema,
+  caption={Código utilizado no tratamento dos dados experimentais.},
+  label={lst:codigo}
+]{calculo_transferencia.py}
+
+\end{document}
