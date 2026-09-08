@@ -6,7 +6,7 @@ import math as M
 # Medicoes no SI: Pa, m, s, kg e graus Celsius.
 x = dict(V=120.3, I=20.0, P0=0.0, T0=96.0, dH=.042, t=1800.0,
          P1=.95e5, T1=116.4, Ta=26.4, Patm=91.86e3, g=9.78,
-         mv=.0478, dp=.00249, di=.247, de=.253, H=.210, eps=.60)
+         mv=.0558, dp=.00249, di=.247, de=.253, H=.210, eps=.60)
 u = dict(V=.03*x["V"], I=.03*x["I"], P0=.05e5, T0=1.0,
          dH=.002, t=30.0, P1=.05e5, T1=1.0, Ta=1.0,
          Patm=.02*x["Patm"], g=.01, mv=.0001, dp=.0001,
