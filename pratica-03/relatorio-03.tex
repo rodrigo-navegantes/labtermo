@@ -1,0 +1,234 @@
+  % Versão resumida do relatório. Mantenha resultados.tex no mesmo diretório
+% para que as macros numéricas sejam carregadas.
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{lmodern}
+\usepackage{geometry}
+\geometry{margin=2.2cm}
+\usepackage{amsmath}
+\usepackage{booktabs,tabularx}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue}
+
+\newcommand{\Qdot}{\dot Q}
+\newcommand{\Patm}{917{,}2}
+\newcommand{\Tsat}{97{,}2}
+\input{resultados.tex}
+
+\begin{document}
+
+\begin{center}
+{\small UNIVERSIDADE FEDERAL DE MINAS GERAIS\\
+Escola de Engenharia -- Engenharia Aeroespacial\\
+EMA-103 -- Laboratório de Térmica}
+
+\vspace{0.8cm}
+{\Large\bfseries Transferência de calor em uma aleta cilíndrica}
+
+\vspace{0.6cm}
+\begin{tabular}{rl}
+\textbf{Aluno(a):} & Rodrigo Malato Navegantes\\
+\textbf{Matrícula:} & 2023038175\\
+\textbf{Turma:} & EA1\\
+\textbf{Professor(a):} & Luiz Machado\\
+\textbf{Data da prática:} & 13 de setembro de 2026
+\end{tabular}
+\end{center}
+
+\section{Objetivo}
+
+Avaliar o perfil de temperatura e a transferência de calor de uma aleta
+cilíndrica de aço aquecida por uma câmara de vapor. Os resultados medidos são
+comparados ao modelo de aleta reta de seção uniforme.
+
+\section{Modelo utilizado}
+
+Admitiu-se regime permanente, condução predominantemente axial, propriedades
+constantes e coeficiente médio de troca térmica $h$. A temperatura varia ao
+longo do comprimento da aleta, mas é aproximadamente uniforme em cada seção
+transversal. Para uma aleta cilíndrica de diâmetro $d$, comprimento $L$ e
+condutividade $k$, o perímetro e a área transversal são
+\begin{equation}
+  P=\pi d,\qquad A=\frac{\pi d^2}{4},
+\end{equation}
+e o parâmetro que relaciona a condução na aleta com as perdas para o ambiente é
+\begin{equation}
+  m=\sqrt{\frac{hP}{kA}}=\sqrt{\frac{4h}{kd}}.
+\end{equation}
+
+Definindo $\theta=T-T_{\mathrm{amb}}$, o balanço de energia em um elemento da
+aleta resulta em
+\begin{equation}
+  \frac{d^2\theta}{dx^2}-m^2\theta=0.
+\end{equation}
+Na base, a condição é $T(0)=T_b$. Na ponta, foi considerada convecção pela área
+da seção transversal. Com essas condições, o perfil previsto é~\cite{incropera}
+\begin{equation}
+\frac{T(x)-T_{\mathrm{amb}}}{T_b-T_{\mathrm{amb}}}=
+\frac{\cosh[m(L-x)]+\dfrac{h}{mk}\sinh[m(L-x)]}
+{\cosh(mL)+\dfrac{h}{mk}\sinh(mL)}.
+\label{eq:perfil}
+\end{equation}
+
+A taxa teórica foi obtida pela condução na raiz da aleta. Como conferência, a
+taxa experimental foi calculada integrando as perdas convectivas e radiativas
+representadas por $h$ ao longo do perfil de temperaturas medido. A efetividade $\epsilon$
+compara a aleta com a base sem aleta; a eficiência $\eta$ compara a taxa real com a
+taxa que ocorreria se toda a aleta estivesse na temperatura da base.
+
+\section{Procedimento e dados}
+
+Foram usados uma aleta cilíndrica de aço, câmara e gerador de vapor, termopar
+tipo K, pirômetro, escala e paquímetro. Após a estabilização do conjunto,
+mediram-se a temperatura da base, a temperatura ambiente e as temperaturas ao
+longo da aleta nas posições de 45 a 295 mm. O comprimento e o diâmetro foram
+medidos diretamente; foram adotados ainda $k=(60\pm5)$ W/(m K) e
+$h=(12\pm2)$ W/(m$^2$ K), conforme o roteiro da disciplina~\cite{roteiro}.
+
+Como a câmara é alimentada por vapor, adotou-se a pressão atmosférica registrada
+às 17h (horário de Brasília) pela estação meteorológica
+\emph{Belo Horizonte--Pampulha} do INMET: \Patm\ hPa~\cite{inmet}. Essa pressão
+corresponde a uma temperatura de saturação da água de aproximadamente
+\Tsat\ $^\circ$C.
+
+Os cálculos, a propagação das incertezas e as tabelas foram gerados pelo arquivo
+\href{}{\texttt{codigo-03.py}} do repositório da disciplina~\cite{codigo}.
+
+\begin{table}[h]
+\centering
+\caption{Dados usados na análise.}
+\small
+\begin{tabular}{lcc}
+\toprule
+\textbf{Grandeza} & \textbf{Valor} & \textbf{Incerteza ou observação}\\
+\midrule
+$L$ (mm) & \Laleta & $\pm0{,}5$ mm\\
+$d$ (mm) & \Daleta & $\pm0{,}1$ mm\\
+$T_b=T(0)$ ($^{\circ}$C) & \Tzero & $\pm1{,}0\,^{\circ}$C\\
+$T(45)$ ($^{\circ}$C) & \Tquarentacinco & $\pm1{,}0\,^{\circ}$C\\
+$T(95)$ ($^{\circ}$C) & \Tnoventacinco & $\pm1{,}0\,^{\circ}$C\\
+$T(145)$ ($^{\circ}$C) & \Tcentoquarentacinco & $\pm1{,}0\,^{\circ}$C\\
+$T(195)$ ($^{\circ}$C) & \Tcentonoventacinco & $\pm1{,}0\,^{\circ}$C\\
+$T(245)$ ($^{\circ}$C) & \Tduzentosquarentacinco & $\pm1{,}0\,^{\circ}$C\\
+$T(295)$ ($^{\circ}$C) & \Tduzentosnoventacinco & $\pm1{,}0\,^{\circ}$C\\
+$T_{\mathrm{amb}}$ ($^{\circ}$C) & \Tamb & $\pm1{,}0\,^{\circ}$C\\
+$p_{\mathrm{atm}}$ (hPa) & \Patm & ---\\
+\bottomrule
+\end{tabular}
+\label{tab:medicoes}
+\end{table}
+
+As incertezas foram propagadas numericamente a partir das incertezas dos dados
+de entrada. Os resultados são apresentados com incerteza expandida ($k=2$).
+
+\section{Resultados e discussão}
+
+\subsection{Perfil de temperaturas}
+
+A Tabela~\ref{tab:perfil} compara as temperaturas medidas com a
+Equação~\eqref{eq:perfil}. O ponto na base é condição de contorno do modelo;
+os demais pontos são usados para avaliar a concordância.
+
+\begin{table}[h]
+\centering
+\caption{Comparação entre os perfis experimental e teórico.}
+\small
+\begin{tabular}{ccccc}
+\toprule
+$x$ (mm) & $T_{\mathrm{exp}}$ ($^{\circ}$C) &
+$T_{\mathrm{teo}}\pm U$ ($^{\circ}$C) &
+$\delta_T$ ($^{\circ}$C) & Compatível?\\
+\midrule
+0   & \Tzero & \Tteozero$\pm$\UTteozero & \Deltazero & \Compzero\\
+45  & \Tquarentacinco & \Tteoquarentacinco$\pm$\UTteoquarentacinco & \Deltaquarentacinco & \Compquarentacinco\\
+95  & \Tnoventacinco & \Tteonoventacinco$\pm$\UTteonoventacinco & \Deltanoventacinco & \Compnoventacinco\\
+145 & \Tcentoquarentacinco & \Tteocentoquarentacinco$\pm$\UTteocentoquarentacinco & \Deltacentoquarentacinco & \Compcentoquarentacinco\\
+195 & \Tcentonoventacinco & \Tteocentonoventacinco$\pm$\UTteocentonoventacinco & \Deltacentonoventacinco & \Compcentonoventacinco\\
+245 & \Tduzentosquarentacinco & \Tteoduzentosquarentacinco$\pm$\UTteoduzentosquarentacinco & \Deltaduzentosquarentacinco & \Compduzentosquarentacinco\\
+295 & \Tduzentosnoventacinco & \Tteoduzentosnoventacinco$\pm$\UTteoduzentosnoventacinco & \Deltaduzentosnoventacinco & \Compduzentosnoventacinco\\
+\bottomrule
+\end{tabular}
+\label{tab:perfil}
+\end{table}
+
+O perfil apresentou concordância \QualificacaoPerfil. Dos seis pontos
+independentes, \NCompativeis{} são compatíveis dentro das incertezas e
+\NRoteiro{} atendem ao critério de diferença inferior a $1\,^{\circ}$C. O maior
+desvio ocorreu em $x=\XMaiorDesvio$ mm e valeu
+\MaiorDesvio\,$^{\circ}$C. Como os demais pontos acompanham a tendência prevista,
+esse resultado sugere uma perturbação localizada de leitura, como contato
+imperfeito do termopar ou corrente de ar.
+
+\subsection{Transferência de calor e desempenho}
+
+\begin{table}[h]
+\centering
+\caption{Resultados principais da aleta. Incertezas expandidas, com $k=2$.}
+\small
+\begin{tabular}{lcc}
+\toprule
+\textbf{Grandeza} & \textbf{Resultado} & \textbf{Unidade}\\
+\midrule
+Produto $mL$ & \mL & --\\
+Taxa teórica, $\Qdot_{\mathrm{teo}}$ & $\Qteorico\pm\UQteorico$ & W\\
+Taxa pelo perfil medido, $\Qdot_{\mathrm{exp}}$ & $\Qexperimental\pm\UQexperimental$ & W\\
+Desvio entre as taxas & \DesvioQ & \%\\
+Efetividade teórica, $\varepsilon_f$ & $\EfetividadeTeorica\pm\UEfetividadeTeorica$ & --\\
+Eficiência teórica, $\eta_f$ & $\EficienciaTeorica\pm\UEficienciaTeorica$ & --\\
+\bottomrule
+\end{tabular}
+\label{tab:desempenho}
+\end{table}
+
+As taxas de calor foram \QualificacaoTaxa: a estimativa teórica foi
+$\Qteorico\pm\UQteorico$ W e a estimativa obtida do perfil medido foi
+$\Qexperimental\pm\UQexperimental$ W. A diferença foi de \DesvioQ\%. Como as
+duas estimativas usam os mesmos valores de $h$ e de geometria, essa comparação
+mostra consistência entre o perfil e o modelo, mas não é uma validação totalmente
+independente da taxa de calor.
+
+A eficiência de $\EficienciaTeorica\pm\UEficienciaTeorica$ é limitada pela queda
+de temperatura ao longo da aleta. Ainda assim, a efetividade de
+$\EfetividadeTeorica\pm\UEfetividadeTeorica$ mostra que a aleta transfere muito
+mais calor do que a base sozinha. Portanto, uma eficiência moderada não impede
+que a aleta seja útil.
+
+\section{Conclusão}
+
+O modelo de aleta cilíndrica representou adequadamente as temperaturas medidas:
+\NCompativeis{} dos seis pontos independentes foram compatíveis dentro das
+incertezas. As taxas de calor teórica e experimental também foram
+\QualificacaoTaxa, com desvio de \DesvioQ\%.
+
+A pressão atmosférica adotada foi a leitura das 17h da estação Pampulha do
+INMET: \Patm\ hPa. Esse valor implica temperatura de saturação de aproximadamente
+\Tsat\,$^{\circ}$C e serve como verificação da fonte de vapor. A principal
+limitação da análise continua sendo a incerteza do coeficiente de troca térmica
+$h$.
+
+\begin{thebibliography}{9}
+
+\bibitem{roteiro}
+UFMG. \textit{EMA-103: Laboratório de Térmica -- Aulas 6 e 7: aleta
+cilíndrica}. Material didático da disciplina, 2026.
+
+\bibitem{incropera}
+BERGMAN, T. L.; LAVINE, A. S.; INCROPERA, F. P.; DEWITT, D. P.
+\textit{Fundamentals of Heat and Mass Transfer}. 7. ed. Hoboken: Wiley, 2011.
+
+\bibitem{inmet}
+INSTITUTO NACIONAL DE METEOROLOGIA (INMET). \textit{Dados horários da estação
+automática Belo Horizonte--Pampulha, 13 set. 2026}. Plataforma WIS2, consulta
+em 21 set. 2026. \url{https://wis2bra.inmet.gov.br/oapi/collections}.
+
+\bibitem{codigo}
+NAVEGANTES, R. M. \textit{LabTermo: código da Prática 3}. Arquivo
+\texttt{pratica-03/codigo-03.py}. Disponível em:
+\url{https://github.com/rodrigo-navegantes/labtermo}.
+
+\end{thebibliography}
+
+\end{document}
